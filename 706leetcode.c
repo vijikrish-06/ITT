@@ -1,0 +1,32 @@
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX_KEY 1000001
+
+typedef struct {
+    int* map;
+} MyHashMap;
+MyHashMap* myHashMapCreate() {
+    MyHashMap* obj = (MyHashMap*)malloc(sizeof(MyHashMap));
+
+    obj->map = (int*)malloc(MAX_KEY * sizeof(int));
+    memset(obj->map, -1, MAX_KEY * sizeof(int));
+    return obj;
+}
+void myHashMapPut(MyHashMap* obj, int key, int value) {
+obj->map[key] = value;
+}
+int myHashMapGet(MyHashMap* obj, int key) {
+
+    return obj->map[key];
+}
+void myHashMapRemove(MyHashMap* obj, int key) {
+    
+    obj->map[key] = -1;
+}
+void myHashMapFree(MyHashMap* obj) {
+    free(obj->map);
+    free(obj);
+}
+
+
