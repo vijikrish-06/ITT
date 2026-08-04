@@ -1,0 +1,51 @@
+/*#include <stdio.h>
+#include <stdlib.h>
+
+/**
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+int* findMissingElements(int* nums, int numsSize, int* returnSize) {
+    if (numsSize <= 0) {
+        *returnSize = 0;
+        return NULL;
+    }
+
+    // Step 1: Find the minimum and maximum elements in the array
+    int min_val = nums[0];
+    int max_val = nums[0];
+    for (int i = 1; i < numsSize; i++) {
+        if (nums[i] < min_val) min_val = nums[i];
+        if (nums[i] > max_val) max_val = nums[i];
+    }
+
+    // Step 2: Calculate the total numbers expected in the full range
+    int range_size = max_val - min_val + 1;
+    
+    // Step 3: Create a boolean array to mark the presence of elements
+    // calloc initializes all elements to 0 (false)
+    int* present = (int*)calloc(range_size, sizeof(int));
+    for (int i = 0; i < numsSize; i++) {
+        present[nums[i] - min_val] = 1; // Mark as present
+    }
+
+    // Step 4: Allocate memory for the missing elements array
+    // At most, (range_size - numsSize) elements can be missing
+    int max_missing = range_size - numsSize;
+    int* missing_elements = (int*)malloc(max_missing * sizeof(int));
+    int missing_count = 0;
+
+    // Step 5: Identify and collect missing numbers sequentially (guarantees sorted order)
+    for (int i = 0; i < range_size; i++) {
+        if (present[i] == 0) {
+            missing_elements[missing_count] = min_val + i;
+            missing_count++;
+        }
+    }
+
+    // Clean up temporary tracking array
+    free(present);
+
+    // Set the output size for LeetCode's wrapper
+    *returnSize = missing_count;
+    return missing_elements;
+}
